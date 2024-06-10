@@ -1,4 +1,7 @@
 /* options.css */
+.options {
+  font-family: Arial, sans-serif;
+}
 
 .options input,
 .options textarea,
@@ -20,5 +23,4 @@
 
 .options .error {
   color: #f00;
-  /* Red color for error messages */
 }

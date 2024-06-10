@@ -3,13 +3,12 @@ const saveButton = document.getElementById('save-button');
 const saveStatus = document.getElementById('save-status');
 
 // Load webhooks from storage
-chrome.storage.sync.get(['webhooks', 'previousIndex'], (data) => {
-  const storedWebhooks = JSON.parse(data.webhooks);
-  const lastIndex = data.previousIndex;
-  if (storedWebhooks) {
-    webhooksTextarea.value = data.webhooks;
-  } else {
-    // Set default webhooks if none exist
+chrome.storage.sync.get(['webhooks'], (data) => {
+  try {
+    const storedWebhooks = data.webhooks ? JSON.parse(data.webhooks) : [];
+    webhooksTextarea.value = JSON.stringify(storedWebhooks, null, 2);
+  } catch (error) {
+    console.error('Error parsing webhooks from storage:', error);
     webhooksTextarea.value = '[]'; // Or your default webhook configuration
   }
 });
@@ -28,7 +27,7 @@ saveButton.addEventListener('click', () => {
     return;
   }
 
-  chrome.storage.sync.set({ webhooks: JSON.stringify(webhooks), previousIndex:5 }, () => {
+  chrome.storage.sync.set({ webhooks: JSON.stringify(webhooks) }, () => {
     chrome.runtime.reload();
     saveStatus.textContent = 'Options saved.';
     saveStatus.classList.remove('error');

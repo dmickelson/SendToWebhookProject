@@ -1,30 +1,17 @@
-// background.js
-
-try {
-  importScripts('src/webhook.js');
-} catch (e) {
-  console.log(e);
-}
-
-try {
-  importScripts('src/utils.js');
-} catch (e) {
-  console.log(e);
-}
-
+import { WebHook, WebHookAction } from '../webhook.js';
+import { escapeJsonValue, setBrowserIcon } from '../utils.js';
 
 // Get the webhooks from your storage or configuration (replace with your actual logic)
 const webhooks = [
-  // Example:
   new WebHook(
     'My Webhook',
-    ['https://example.com/*'], // Match URLs starting with https://example.com/
-    ['https://api.example.com/webhook'], // Target URL pattern
+    ['https://example.com/*'],
+    ['https://api.example.com/webhook'],
     new WebHookAction(
-      'POST', // HTTP method
-      'https://api.example.com/webhook', // Target URL
-      JSON.stringify({ message: 'Hello from extension' }), // Payload
-      { 'Content-Type': 'application/json' } // Headers
+      'POST',
+      'https://api.example.com/webhook',
+      JSON.stringify({ message: 'Hello from extension' }),
+      { 'Content-Type': 'application/json' }
     )
   ),
   // ... more webhook definitions
@@ -33,43 +20,55 @@ const webhooks = [
 // Create the context menus
 function createContextMenus() {
   chrome.contextMenus.removeAll(() => {
-    for (const webhook of webhooks) {
+    for (const [index, webhook] of webhooks.entries()) {
       const isLink = webhook.targetUrlPatterns !== undefined && webhook.targetUrlPatterns.length > 0;
 
       if (isLink) {
         chrome.contextMenus.create({
+          id: `sendLinkTo${webhook.name.replace(/\s+/g, '')}${index}`,
           documentUrlPatterns: webhook.documentUrlPatterns,
           title: `Send Link to ${webhook.name}`,
           contexts: ['link'],
           targetUrlPatterns: webhook.targetUrlPatterns,
-          onclick: (info) => {
-            send(info.linkUrl, webhook.action);
-          }
         });
 
         chrome.contextMenus.create({
+          id: `sendImageTo${webhook.name.replace(/\s+/g, '')}${index}`,
           documentUrlPatterns: webhook.documentUrlPatterns,
           title: `Send Image to ${webhook.name}`,
           contexts: ['image'],
           targetUrlPatterns: webhook.targetUrlPatterns,
-          onclick: (info) => {
-            send(info.srcUrl, webhook.action);
-          }
         });
 
       } else {
         chrome.contextMenus.create({
+          id: `sendSelectionTo${webhook.name.replace(/\s+/g, '')}${index}`,
           documentUrlPatterns: webhook.documentUrlPatterns,
           title: `Send "%s" to ${webhook.name}`,
           contexts: ['selection'],
-          onclick: (info) => {
-            send(escapeJsonValue(info.selectionText), webhook.action);
-          }
         });
       }
     }
   });
 }
+
+// Handle context menu clicks
+chrome.contextMenus.onClicked.addListener((info, tab) => {
+  const id = info.menuItemId;
+
+  // Find the matching webhook
+  const webhook = webhooks.find(webhook => id.startsWith(`send${webhook.name.replace(/\s+/g, '')}`));
+
+  if (webhook) {
+    if (id.startsWith('sendLinkTo')) {
+      send(info.linkUrl, webhook.action);
+    } else if (id.startsWith('sendImageTo')) {
+      send(info.srcUrl, webhook.action);
+    } else if (id.startsWith('sendSelectionTo')) {
+      send(escapeJsonValue(info.selectionText), webhook.action);
+    }
+  }
+});
 
 // Function to handle sending data to the webhook
 function send(param, action) {
@@ -108,7 +107,4 @@ function send(param, action) {
   }
 }
 
-// Call the function to create the context menus
 createContextMenus();
-
-// ... other background script logic (if needed)

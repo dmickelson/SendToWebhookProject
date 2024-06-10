@@ -1,14 +1,14 @@
 // utils.js
 
 // Function to escape a JSON value
-function escapeJsonValue(value) {
+export function escapeJsonValue(value) {
   const o = [value || '']; // Create an array with the value (or an empty string)
   const str = JSON.stringify(o); // Stringify the array
   return str.substring(2, str.length - 2); // Extract the escaped value from the string
 }
 
 // Function to set the browser icon based on status
-function setBrowserIcon(status, title = '') {
+export function setBrowserIcon(status, title = '') {
   switch (status) {
     case 'OK':
       chrome.browserAction.setBadgeText({ text: '✓' });
@@ -30,7 +30,8 @@ function setBrowserIcon(status, title = '') {
       chrome.browserAction.setTitle({ title: title || '' }); // Set title (optional)
       break;
   }
+  chrome.action.setIcon({ path: iconPath });
+  if (message) {
+    chrome.action.setTitle({ title: message });
+  }
 }
-
-// Export the functions
-export { escapeJsonValue, setBrowserIcon };
