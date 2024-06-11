@@ -1,3 +1,5 @@
+// webhook.js
+
 export class WebHook {
   constructor(name, documentUrlPatterns, targetUrlPatterns, action) {
     this.name = name;
