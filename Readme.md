@@ -1,4 +1,4 @@
-## This project has been deprecated. Google no longer accept manifest v2 and the current version in the Chrome web store will be removed at sometime. Unforturately I cannot make any time to maintain this. If anyone is interested, feel free to fork and keep it going. Sorry for the inconvenience to the existing users.
+## This project has updated to support Google mainifest V3. It also now support Page Title and URL inputs.
 
 ## Send To WebHook
 
@@ -140,11 +140,10 @@ Test getting all of the patterns
 
 ### What's New
 
-| Date       | Description                                 |
-| ---------- | ------------------------------------------- |
-| 2022-08-10 | Allow http headers to be set in the request |
-| 2018-06-02 | Add ability to send arbitrary text          |
-| 2018-05-29 | First published                             |
+| Date       | Description                               |
+| ---------- | ----------------------------------------- |
+| 2024-06-09 | Add support for URL and Page Title inputs |
+| 2024-06-01 | Version Manifest v3 support               |
 
 ### Buy me a coffee!
 
