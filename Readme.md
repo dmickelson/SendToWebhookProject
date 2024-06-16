@@ -28,6 +28,8 @@ The JSON config is a list of config which defines page/link matching rules and W
 | Templates |                                    |
 | --------- | :--------------------------------- |
 | `%s`      | selected text                      |
+| `%u`      | current tab url                    |
+| `%t`      | current tab title                  |
 | `%d`      | current date time in ISO format    |
 | `%l`      | current date time in Locale format |
 
@@ -104,6 +106,32 @@ I want to grab a matched .ipa or .apk link from Expo's build page, and send to B
           }
         ],
         "triggered_by": "send-to-webhook"
+      }
+    }
+  }
+]
+```
+
+### Example 3
+
+Test getting all of the patterns
+
+```
+[
+  {
+    "name": "Test All",
+    "targetUrlPatterns": [
+      "https://*.amazonaws.com/ios%2F%40username%2Ftestapp-*-archive.ipa"
+    ],
+    "action": {
+      "url": "<YOUR-SLACK-CHANNELS-INCOMING-WEBHOOK-URL>",
+      "method": "POST",
+      "payload": {
+        "text": "%s",
+		    "current_url": "%u",
+		    "current_title": "%t",
+		    "current_iso_date": "%d",
+		    "current_local_date": "%l"
       }
     }
   }

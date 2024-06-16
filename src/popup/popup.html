@@ -1,2 +1,29 @@
-<button id="go-to-options">Go to options</button>
-<script src="popup.js"></script>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Popup</title>
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
+    <div class="popup">
+      <div class="arbitrary">
+        <label class="title">Send arbitrary</label>
+        <textarea id="content"></textarea>
+        <div class="buttons">
+          <select id="webhook-select"></select>
+          <label id="send-status"></label>
+          <button id="send-button">Send</button>
+        </div>
+      </div>
+      <hr />
+      <a href="#" id="options-link">Options</a>
+      <hr />
+      <a href="#" id="developers-link">Developer's page</a>
+      <a href="#" id="issues-link">Report an issue</a>
+      <a href="#" id="donate-link">Donate!</a>
+    </div>
+    <script src="popup.js" type="module"></script>
+  </body>
+</html>

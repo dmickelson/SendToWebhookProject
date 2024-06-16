@@ -72,6 +72,7 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
 
 // Function to handle sending data to the webhook
 function send(param, action) {
+  console.log('background.js send function')
   if (param !== undefined && action !== undefined) {
     const { method, url, payload, headers } = action;
     let body;
